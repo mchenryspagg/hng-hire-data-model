@@ -1,0 +1,154 @@
+CREATE DATABASE hng_hire;
+USE hng_hire;
+
+-- Dimension Tables
+CREATE TABLE candidates (
+    candidate_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(255),
+    email VARCHAR(255),
+    phone_number VARCHAR(20),
+    github_profile VARCHAR(255),
+    linkedin_profile VARCHAR(255),
+    experience_level VARCHAR(50)
+);
+
+CREATE TABLE employers (
+    employer_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(255),
+    industry VARCHAR(100),
+    location VARCHAR(255)
+);
+
+CREATE TABLE job_roles (
+    job_role_id INT AUTO_INCREMENT PRIMARY KEY,
+    job_title VARCHAR(255),
+    description TEXT
+);
+
+CREATE TABLE stack (
+    stack_id INT AUTO_INCREMENT PRIMARY KEY,
+    stack_name VARCHAR(255)
+);
+
+CREATE TABLE status (
+    status_id INT AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(50)
+);
+
+CREATE TABLE location (
+location_id INT AUTO_INCREMENT PRIMARY KEY,
+country VARCHAR(255),
+city VARCHAR(255)
+);
+
+CREATE TABLE date (
+    date_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_date DATE,
+    Year INT,               -- Year as a numeric value
+    Month TINYINT,          -- Month as a numeric value (1-12)
+    Day TINYINT,            -- Day as a numeric value (1-31)
+    Quarter TINYINT,        -- Quarter as a numeric value (1-4)
+    is_weekend BOOLEAN,     -- Boolean to indicate if the date is a weekend (1 for true, 0 for false)
+    interview_date DATE,    -- Interview date stored as a DATE type
+    hiring_date DATE        -- Hiring date stored as a DATE type
+);
+
+-- Fact Table
+CREATE TABLE hiring (
+    hiring_id INT AUTO_INCREMENT PRIMARY KEY,
+    candidate_id INT,
+    employer_id INT,
+    job_role_id INT,
+    stack_id INT,
+    status_id INT,
+    date_id INT,
+    location_id INT,
+    interview_score FLOAT,
+    Years_of_experience INT,
+    FOREIGN KEY (candidate_id) REFERENCES candidates(candidate_id),
+    FOREIGN KEY (employer_id) REFERENCES employers(employer_id),
+    FOREIGN KEY (job_role_id) REFERENCES job_roles(job_role_id),
+    FOREIGN KEY (stack_id) REFERENCES stack(stack_id),
+    FOREIGN KEY (status_id) REFERENCES status(status_id),
+	FOREIGN KEY (date_id) REFERENCES date(date_id),
+	FOREIGN KEY (location_id) REFERENCES location(location_id)
+);
+
+
+--- Find out the set import folder 
+SHOW VARIABLES LIKE "secure_file_priv";
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/candidates.csv'
+INTO TABLE candidates
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(full_name, email, phone_number, github_profile, linkedin_profile, experience_level);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/employers.csv'
+INTO TABLE employers
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(company_name, industry, location);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/job_roles.csv'
+INTO TABLE job_roles
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(job_title, description);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/stack.csv'
+INTO TABLE stack
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(stack_name);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/status.csv'
+INTO TABLE status
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(status_name);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/location.csv'
+INTO TABLE location
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(country, city);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/date.csv'
+INTO TABLE date
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(full_date, Year, Month, Day, Quarter, is_weekend, interview_date, hiring_date);
+
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/hiring.csv'
+INTO TABLE hiring
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(candidate_id, employer_id, job_role_id, stack_id, status_id, date_id, location_id, interview_score, Years_of_experience);
+
+
+select * from candidates;
+select * from date;
+select * from employers;
+select * from hiring;
+select * from job_roles;
+select * from location;
+select * from stack;
+select * from status;
